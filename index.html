@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Afgooye Trader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#0a0d14;--card:#111621;--row:#161c2a;--line:#222a3b;--text:#ffffff;--mut:#c5ccdb;--font:"Inter",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--gold:#c9a24d;--red:#e5675d;--green:#33b784;--blue:#6ba3e6}
+:root[data-theme="light"]{--bg:#f3f4f7;--card:#fff;--row:#f3f4f8;--line:#dfe2ea;--text:#171c29;--mut:#656d82;--gold:#8f6d17;--red:#c0392b;--green:#13805a;--blue:#2563a8}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:500 14px/1.5 var(--font)}
+.wrap{max-width:960px;margin:0 auto;padding:24px 16px 56px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+h1{font:600 28px/1.1 var(--font);letter-spacing:.04em;margin:0;color:var(--gold)}
+.sub{color:var(--mut);font-size:13px;margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:16px;overflow:hidden}
+.hd{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.hd h2{margin:0;font-size:15px;font-weight:600}
+.hd span{color:var(--mut);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:16px 18px;border-right:1px solid var(--line)}.stat:last-child{border:0}
+.stat small{color:var(--mut);font-size:12px}
+.stat b{display:block;font:600 28px/1.2 var(--font);margin:2px 0}
+.rules{padding:6px 18px 16px;display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}
+.rule{background:var(--row);padding:10px 12px;border-radius:7px;display:flex;justify-content:space-between;gap:10px;font-size:13px;align-items:center}
+.tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px;border:1px solid;white-space:nowrap;background:transparent}
+.g{color:var(--gold)}.rd{color:var(--red)}.gr{color:var(--green)}.bl{color:var(--blue)}.mu{color:var(--mut)}
+.trk{padding:16px 18px;display:grid;gap:14px}
+.tr{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
+.tr .lbl{width:100px;color:var(--mut)}
+.bar{flex:1;min-width:120px;height:8px;background:var(--row);border-radius:5px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;width:0;background:var(--green);transition:width .25s,background .25s}
+.val{width:84px;text-align:right;font-variant-numeric:tabular-nums}
+button{font:inherit;font-weight:500;font-size:12px;background:transparent;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:5px 11px;cursor:pointer}
+button:hover{border-color:var(--mut);color:var(--text)}
+button:focus-visible,.item:focus-within{outline:2px solid var(--gold);outline-offset:1px}
+.b1{color:var(--green);border-color:var(--green)}.b2{color:var(--red);border-color:var(--red)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:700px){.cols{grid-template-columns:1fr}.stat{padding:12px 10px}.stat b{font-size:22px}.stat small{font-size:11px;display:block;line-height:1.25}}
+.cols .card{margin:0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.pair .card{margin:0;display:flex;flex-direction:column}
+.pair .sec{flex:1;align-content:start}
+.pair .item{padding:8px 10px;font-size:12.5px}
+.hd{flex-wrap:wrap}
+@media(max-width:700px){.pair{grid-template-columns:1fr}}
+.cols .sec{grid-template-columns:1fr 1fr;gap:5px;padding:12px 12px 4px}
+.cols .sec h3{grid-column:1/-1;margin:6px 0 0;font-size:11px}
+.cols .sec h3:first-child{margin-top:0}
+.cols .item{padding:6px 8px;gap:7px;font-size:11.5px;line-height:1.25}
+.cols .box{width:15px;height:15px;border-width:1.3px}
+.cols .item input:checked+.box::after{width:4px;height:8px}
+.cols .tag{font-size:10px;padding:1px 6px}
+.sec{padding:14px 16px 6px;display:grid;gap:6px}
+.sec h3{margin:8px 0 2px;font-size:12px;font-weight:600;color:var(--gold)}
+.sec h3:first-child{margin-top:0}
+.item{display:flex;align-items:center;gap:12px;background:var(--row);padding:10px 12px;border-radius:7px;cursor:pointer;font-size:13px;user-select:none;position:relative}
+.item input{position:absolute;opacity:0}
+.box{width:18px;height:18px;border:1.5px solid var(--mut);border-radius:5px;flex:none;display:grid;place-items:center}
+.item input:checked+.box{background:var(--green);border-color:var(--green)}
+.item input:checked+.box::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item input:checked~.t{color:var(--mut)}
+.t{flex:1}.t em{display:block;font-style:normal;color:var(--mut);font-size:12px;margin-top:1px}
+textarea{width:100%;min-height:76px;background:var(--row);color:var(--text);border:1px solid var(--line);border-radius:7px;padding:10px 12px;font:inherit;font-size:13px;resize:vertical}
+textarea::placeholder{color:var(--mut)}
+.pad{padding:4px 16px 16px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;font-size:12px;color:var(--mut)}
+.prog{display:flex;align-items:center;gap:10px}.prog .bar{width:140px;flex:none;min-width:0}
+.mid{text-align:center;margin-top:16px}
+.form{padding:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:700px){.form{grid-template-columns:1fr 1fr}}
+.form label{display:grid;gap:4px;font-size:12px;color:var(--mut)}
+input[type=text],input[type=number],input[type=datetime-local],select{width:100%;background:var(--row);color:var(--text);border:1px solid var(--line);border-radius:7px;padding:8px 10px;font:inherit;font-size:13px}
+.act{padding:0 16px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pri{background:var(--gold);color:#111;border-color:var(--gold);font-weight:600;padding:8px 16px}
+.pri:hover{color:#111;opacity:.9}
+.hs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+@media(max-width:700px){.hs{grid-template-columns:1fr 1fr}}
+.hs div{padding:12px 16px}.hs small{color:var(--mut);font-size:12px}.hs b{display:block;font:600 20px var(--font)}
+.hs{grid-template-columns:repeat(5,1fr)}
+.wk{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:14px 16px 0}
+.wk b{font-weight:600;font-size:13px;margin:0 6px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:12px 16px 14px}
+@media(max-width:700px){.days{grid-template-columns:repeat(4,1fr)}}
+.dy{display:grid;gap:2px;text-align:center;padding:9px 4px;border-radius:8px;background:var(--row);color:var(--text);font-size:12px}
+.dy strong{font-size:13px}.dy span{color:var(--mut)}.dy span.gr{color:var(--green)}.dy span.rd{color:var(--red)}
+.dy.on{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.vt{padding:0 16px 12px;font:600 15px var(--font);color:var(--gold)}
+.shots{padding:0 16px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.thumbs img{width:64px;height:48px;object-fit:cover;border-radius:5px;border:1px solid var(--line);cursor:zoom-in;background:var(--row)}
+.pvw{position:relative}.pvw img{width:72px;height:54px;object-fit:cover;border-radius:6px;border:1px solid var(--line);display:block}
+.pvw button{position:absolute;top:-7px;right:-7px;width:20px;height:20px;padding:0;border-radius:50%;background:var(--card);line-height:1}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.88);display:grid;place-items:center;z-index:50;cursor:zoom-out;padding:16px}
+.lb[hidden]{display:none}.lb img{max-width:96vw;max-height:92vh;border-radius:8px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:640px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:600}
+td em{display:block;font-style:normal;color:var(--mut);margin-top:2px;max-width:260px}
+.empty{padding:22px 18px;color:var(--mut);font-size:13px}
+#csv{margin:0 16px 16px;width:calc(100% - 32px);display:none;font-family:ui-monospace,monospace;font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div><h1>Afgooye Trader</h1><div class="sub">Trade execution framework · Setup checklist and risk management</div></div>
+<button id="theme">Switch theme</button>
+</header>
+
+<section class="card">
+<div class="hd"><h2>Risk management rules</h2><span>Non-negotiable</span></div>
+<div class="stats">
+<div class="stat"><small>Daily risk</small><b class="g">1–2%</b><small>Maximum per day</small></div>
+<div class="stat"><small>Weekly risk</small><b class="rd">4%</b><small>Maximum per week</small></div>
+<div class="stat"><small>Fixed reward</small><b class="gr">3RR</b><small>Risk to reward</small></div></div>
+<div class="rules">
+<div class="rule">Never risk more than 1–2% on a single trade<span class="tag g">Daily</span></div>
+<div class="rule">Stop trading when weekly loss reaches 4%<span class="tag rd">Weekly</span></div>
+<div class="rule">Only take trades with a minimum 3:1 risk-reward<span class="tag gr">3RR</span></div>
+<div class="rule">No revenge trading after hitting the daily limit<span class="tag mu">Rule</span></div></div>
+</section>
+
+<section class="card">
+<div class="hd"><h2>Risk tracker</h2><span>Risk used so far</span></div>
+<div class="trk" id="trk"></div>
+</section>
+
+<div class="cols" id="cols"></div>
+
+<div class="pair">
+<section class="card">
+<div class="hd"><h2>Emotional discipline</h2><span>Confirm before and after every trade</span></div>
+<div class="sec" id="emo"></div>
+<div class="pad"><textarea id="emoNote" placeholder="How do you feel right now? (fear, greed, FOMO, calm)"></textarea></div>
+</section>
+
+<section class="card">
+<div class="hd"><h2>Trade journal</h2><span>Complete after every trade</span></div>
+<div class="sec" id="jr"></div>
+<div class="pad"><textarea id="jrNote" placeholder="Key lesson from this trade"></textarea></div>
+</section>
+</div>
+
+<section class="card">
+<div class="hd"><h2>Record trade</h2><span>Saves the checklist score, emotions and notes above</span></div>
+<div class="form">
+<label>Date and time<input type="datetime-local" id="fdate"></label>
+<label>Instrument<input type="text" id="finst" placeholder="e.g. NQ, EURUSD"></label>
+<label>Setup<select id="fsetup"><option>D IRL to ERL</option><option>D ERL to IRL</option></select></label>
+<label>Direction<select id="fdir"><option>Long</option><option>Short</option></select></label>
+<label>Result<select id="fres"><option>Win</option><option>Loss</option><option>Break-even</option></select></label>
+<label>R achieved<input type="number" id="fr" step="0.1" min="0" value="3"></label>
+<label>Risk taken<select id="frisk"><option>0.5%</option><option selected>1%</option><option>1.5%</option><option>2%</option></select></label>
+<label>Emotion control<select id="femo"><option value="5">5 - Fully in control</option><option value="4">4 - Mostly calm</option><option value="3">3 - Mixed</option><option value="2">2 - Struggled</option><option value="1">1 - Emotional trade</option></select></label>
+</div>
+<div class="shots"><button type="button" id="pick">Add screenshots</button><input type="file" id="fshots" accept="image/*" multiple hidden><span class="mu" style="font-size:12px">Choose, drag in, or paste with Ctrl+V. Saved with this trade.</span><div class="thumbs" id="pprev" style="margin:0"></div></div>
+<div class="act"><button class="pri" id="saveTrade">Record trade</button><span id="fmsg" class="mu"></span></div>
+</section>
+
+<section class="card">
+<div class="hd"><h2>Trade history</h2><span id="hcount"></span></div>
+<div class="wk"><button id="pw">Previous week</button><b id="wlabel"></b><button id="nw">Next week</button><button id="tw2">This week</button><button id="allt">All time</button></div>
+<div class="days" id="days"></div>
+<div class="vt" id="vtitle"></div>
+<div class="hs" id="hs"></div>
+<div class="tw" id="hist"></div>
+<textarea id="csv" readonly></textarea>
+<div class="act" style="padding-top:14px"><button id="copyCsv">Export CSV</button><button id="clearHist" class="b2">Clear history</button></div>
+</section>
+
+<section class="card" style="margin-bottom:0"><div class="foot">
+<strong class="g" style="font-family:var(--font);font-size:15px">Afgooye Trader</strong>
+<span class="prog"><span class="bar"><i id="pf"></i></span><span id="pc">0 / 0</span></span>
+<span>Strict discipline · Risk first</span></div></section>
+<div class="mid"><button id="resetAll">Reset all</button></div>
+</div>
+
+<div class="lb" id="lb" hidden><img id="lbimg" alt="Trade screenshot"></div>
+<input type="file" id="addshots" accept="image/*" multiple hidden>
+<script>
+const KEY="afgooye-v1";
+let S={checks:{},daily:0,weekly:0,emoNote:"",jrNote:""};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+const dir=["1H TSQ active","1H TS","1H M#1","1H BB","1H KL","Purge time","2 SSMT"];
+const ent=["5M TS","5M M#1","Purge time","SMT"];
+const emo=[
+["I am calm and focused","No fear or urgency driving this trade"],
+["No FOMO","I am waiting for my setup, not chasing price"],
+["No greed","Position size matches the plan"],
+["No revenge","I am not trying to recover a previous loss"],
+["I controlled my emotions","I followed the plan and my emotions did not decide"]];
+const jr=[
+["Trade journaled","Entry, exit, result and risk recorded"],
+["Screenshots saved","Entry and exit charts attached"],
+["Reason for entry written","Which confirmations were present"],
+["Lesson or mistake noted","What to repeat and what to fix"]];
+
+const ids=[];
+function item(id,label,tag,tc,sub){
+ ids.push(id);
+ return `<label class="item"><input type="checkbox" data-id="${id}"><span class="box"></span><span class="t">${label}${sub?`<em>${sub}</em>`:""}</span>${tag?`<span class="tag ${tc}">${tag}</span>`:""}</label>`}
+function col(key,title,risk,rc,tgt){
+ return `<section class="card"><div class="hd"><h2>${title}</h2></div><div class="sec">
+ <h3>Direction confirmation</h3>${dir.map((d,i)=>item(key+"d"+i,d)).join("")}
+ <h3>Entry confirmation</h3>${ent.map((d,i)=>item(key+"e"+i,d)).join("")}
+ <h3>Execution</h3>
+ ${item(key+"r","Risk "+risk+" per trade",risk,rc)}${item(key+"t","Target "+tgt,"3RR","g")}
+ </div><div style="height:10px"></div></section>`}
+document.getElementById("cols").innerHTML=
+ col("a","D IRL to ERL","1%","rd","1:3RR")+col("b","D ERL to IRL","0.5%","gr","0.5:2RR");
+document.getElementById("emo").innerHTML=emo.map((x,i)=>item("emo"+i,x[0],"","",x[1])).join("");
+document.getElementById("jr").innerHTML=jr.map((x,i)=>item("jr"+i,x[0],"","",x[1])).join("");
+
+const trk=document.getElementById("trk");
+function row(k,label){
+ return `<div class="tr"><span class="lbl">${label}</span><span class="bar"><i id="${k}bar"></i></span><span class="val" id="${k}txt"></span>
+ <button class="b1" data-k="${k}" data-v="1">+1%</button><button class="b1" data-k="${k}" data-v="0.5">+0.5%</button><button class="b2" data-k="${k}" data-v="-0.5" aria-label="Subtract 0.5%">−0.5%</button></div>`}
+trk.innerHTML=row("daily","Daily risk")+row("weekly","Weekly risk")+
+ `<div class="tr"><button id="rd">Reset daily</button><button id="rw">Reset weekly</button></div>`;
+const MAX={daily:2,weekly:4};
+function paint(){
+ for(const k of ["daily","weekly"]){
+  const v=S[k],p=Math.min(100,v/MAX[k]*100);
+  const b=document.getElementById(k+"bar");b.style.width=p+"%";
+  b.style.background=p>=100?"var(--red)":p>=60?"var(--gold)":"var(--green)";
+  document.getElementById(k+"txt").textContent=v+"% / "+MAX[k]+"%"}
+ document.querySelectorAll("input[data-id]").forEach(c=>c.checked=!!S.checks[c.dataset.id]);
+ const n=ids.filter(i=>S.checks[i]).length;
+ document.getElementById("pc").textContent=n+" / "+ids.length;
+ document.getElementById("pf").style.width=(n/ids.length*100)+"%";
+ document.getElementById("emoNote").value=S.emoNote;
+ document.getElementById("jrNote").value=S.jrNote}
+document.addEventListener("change",e=>{const id=e.target.dataset&&e.target.dataset.id;if(id){S.checks[id]=e.target.checked;save();paint()}});
+trk.addEventListener("click",e=>{const b=e.target.closest("button[data-k]");if(!b)return;
+ const k=b.dataset.k;S[k]=Math.max(0,Math.round((S[k]+parseFloat(b.dataset.v))*10)/10);save();paint()});
+document.getElementById("rd").onclick=()=>{S.daily=0;save();paint()};
+document.getElementById("rw").onclick=()=>{S.weekly=0;save();paint()};
+document.getElementById("emoNote").oninput=e=>{S.emoNote=e.target.value;save()};
+document.getElementById("jrNote").oninput=e=>{S.jrNote=e.target.value;save()};
+document.getElementById("resetAll").onclick=()=>{if(!confirm("Reset the checklist, risk tracker and notes? Your recorded trades are kept."))return;S={checks:{},daily:0,weekly:0,emoNote:"",jrNote:"",trades:S.trades};save();paint()};
+if(!Array.isArray(S.trades))S.trades=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nowLocal=()=>new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+$("fdate").value=nowLocal();
+const idb=new Promise(res=>{try{const r=indexedDB.open("afgooye-shots",1);r.onupgradeneeded=()=>r.result.createObjectStore("s");r.onsuccess=()=>res(r.result);r.onerror=()=>res(null)}catch(e){res(null)}});
+const idbDo=async(mode,fn)=>{const db=await idb;if(!db)return null;return new Promise(res=>{try{const tx=db.transaction("s",mode),rq=fn(tx.objectStore("s"));tx.oncomplete=()=>res(rq.result===undefined?true:rq.result);tx.onerror=tx.onabort=()=>res(null)}catch(e){res(null)}})};
+const putShot=(k,b)=>idbDo("readwrite",s=>s.put(b,k)),getShot=k=>idbDo("readonly",s=>s.get(k)),delShot=k=>idbDo("readwrite",s=>s.delete(k));
+const shrink=f=>new Promise(res=>{const u=URL.createObjectURL(f),im=new Image();
+ im.onload=()=>{const sc=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+  c.getContext("2d").drawImage(im,0,0,c.width,c.height);c.toBlob(b=>{URL.revokeObjectURL(u);res(b)},"image/jpeg",.82)};
+ im.onerror=()=>{URL.revokeObjectURL(u);res(null)};im.src=u});
+let pend=[];
+function drawPrev(){$("pprev").innerHTML=pend.map((p,i)=>`<span class="pvw"><img src="${p.url}" alt="Selected screenshot"><button data-rm="${i}" aria-label="Remove screenshot">×</button></span>`).join("")}
+async function addFiles(fs){for(const f of fs){if(!f.type.startsWith("image/"))continue;const b=await shrink(f);if(b)pend.push({blob:b,url:URL.createObjectURL(b)})}drawPrev()}
+async function attach(t,list){t.imgs=t.imgs||[];let bad=0;for(const p of list){const k="s"+t.id+"_"+Math.random().toString(36).slice(2,8);if(await putShot(k,p.blob)!==null)t.imgs.push(k);else bad++}return bad}
+const urls={};
+async function hydrate(){for(const im of $("hist").querySelectorAll("img[data-k]")){const k=im.dataset.k;if(!urls[k]){const b=await getShot(k);if(!b||b===true)continue;urls[k]=URL.createObjectURL(b)}im.src=urls[k]}}
+new MutationObserver(hydrate).observe($("hist"),{childList:true});
+$("pick").onclick=()=>$("fshots").click();
+$("fshots").onchange=async e=>{await addFiles([...e.target.files]);e.target.value=""};
+$("pprev").onclick=e=>{const b=e.target.closest("[data-rm]");if(b){pend.splice(+b.dataset.rm,1);drawPrev()}};
+document.addEventListener("paste",e=>{const f=[...(e.clipboardData&&e.clipboardData.files||[])].filter(x=>x.type.startsWith("image/"));if(f.length){e.preventDefault();addFiles(f)}});
+["dragover","drop"].forEach(n=>document.addEventListener(n,e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes("Files")){e.preventDefault();if(n==="drop")addFiles([...e.dataTransfer.files])}}));
+let addFor=null;
+$("addshots").onchange=async e=>{const t=S.trades.find(x=>x.id===addFor);const fs=[...e.target.files];e.target.value="";if(!t)return;
+ const list=[];for(const f of fs){const b=await shrink(f);if(b)list.push({blob:b})}await attach(t,list);save();renderLog()};
+$("hist").addEventListener("click",e=>{
+ const a=e.target.closest("[data-add]");if(a){addFor=+a.dataset.add;$("addshots").click();return}
+ const im=e.target.closest("img[data-k]");if(im&&im.src){$("lbimg").src=im.src;$("lb").hidden=false}});
+$("lb").onclick=()=>{$("lb").hidden=true};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("lb").hidden=true});
+$("saveTrade").onclick=async()=>{
+ const inst=$("finst").value.trim();
+ if(!inst){$("fmsg").textContent="Enter the instrument first.";return}
+ const res=$("fres").value,r=parseFloat($("fr").value)||0;
+ S.trades.unshift({id:Date.now(),date:$("fdate").value||nowLocal(),inst,setup:$("fsetup").value,dir:$("fdir").value,res,
+  r:res==="Win"?r:res==="Loss"?-(r||1):0,risk:$("frisk").value,emo:+$("femo").value,
+  score:ids.filter(i=>S.checks[i]).length+"/"+ids.length,journaled:!!S.checks.jr0,emoNote:S.emoNote,jrNote:S.jrNote,imgs:[]});
+ const bad=await attach(S.trades[0],pend);pend=[];drawPrev();
+ S.checks={};S.emoNote="";S.jrNote="";
+ {const d=new Date(S.trades[0].date);if(!isNaN(d)){wkStart=mon(d);sel=(d.getDay()+6)%7;allTime=false}}
+ save();paint();renderLog();
+ $("finst").value="";$("fdate").value=nowLocal();$("fmsg").textContent="Trade recorded with "+S.trades[0].imgs.length+" screenshot(s)."+(bad?" "+bad+" could not be stored in this browser.":"")+" Checklist cleared for the next trade."};
+const DN=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const ds=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const mon=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
+let wkStart=mon(new Date()),sel=(new Date().getDay()+6)%7,allTime=false;
+function renderLog(){
+ const dayT=[...Array(7)].map((_,i)=>{const d=new Date(wkStart);d.setDate(d.getDate()+i);const k=ds(d);
+  const tt=S.trades.filter(x=>x.date.slice(0,10)===k);return {i,d,k,tt,net:tt.reduce((a,x)=>a+x.r,0)}});
+ $("wlabel").textContent=ds(wkStart)+" to "+ds(dayT[6].d);
+ $("days").innerHTML=dayT.map(o=>`<button class="dy${!allTime&&sel===o.i?" on":""}" data-d="${o.i}"><strong>${DN[o.i].slice(0,3)}</strong><span>${o.d.getDate()}/${o.d.getMonth()+1}</span><span class="${o.net>0?"gr":o.net<0?"rd":""}">${o.tt.length?(o.net>0?"+":"")+Math.round(o.net*10)/10+"R":"-"}</span><span>${o.tt.length} trade${o.tt.length===1?"":"s"}</span></button>`).join("");
+ const t=allTime?S.trades:dayT[sel].tt;
+ $("vtitle").textContent=allTime?"All recorded trades":DN[sel]+" record · "+dayT[sel].k;
+ const riskUsed=t.reduce((a,x)=>a+(parseFloat(x.risk)||0),0);
+ const w=t.filter(x=>x.res==="Win").length,l=t.filter(x=>x.res==="Loss").length;
+ const net=t.reduce((a,x)=>a+x.r,0),emo=t.length?t.reduce((a,x)=>a+x.emo,0)/t.length:0;
+ $("hcount").textContent=t.length+(t.length===1?" trade":" trades");
+ $("hs").innerHTML=`<div><small>Win rate</small><b>${w+l?Math.round(w/(w+l)*100):0}%</b></div>
+ <div><small>Net R</small><b class="${net>=0?"gr":"rd"}">${net>0?"+":""}${Math.round(net*10)/10}R</b></div>
+ <div><small>Risk used</small><b>${Math.round(riskUsed*10)/10}%</b></div>
+ <div><small>Avg emotion control</small><b>${emo?emo.toFixed(1):"-"} / 5</b></div>
+ <div><small>Journaled</small><b>${t.filter(x=>x.journaled).length} / ${t.length}</b></div>`;
+ $("hist").innerHTML=t.length?`<table><thead><tr><th>Date</th><th>Trade</th><th>Result</th><th>R</th><th>Risk</th><th>Emotion</th><th>Checklist</th><th>Journal</th><th>Screenshots</th><th></th></tr></thead><tbody>`+
+ t.map(x=>`<tr><td>${esc(x.date.replace("T"," "))}</td><td>${esc(x.inst)} · ${x.dir}<em>${esc(x.setup)}</em>${x.emoNote?`<em>Emotions: ${esc(x.emoNote)}</em>`:""}${x.jrNote?`<em>Lesson: ${esc(x.jrNote)}</em>`:""}</td>
+ <td class="${x.res==="Win"?"gr":x.res==="Loss"?"rd":"mu"}">${x.res}</td><td>${x.r>0?"+":""}${x.r}R</td><td>${x.risk}</td><td>${x.emo}/5</td><td>${x.score}</td><td>${x.journaled?"Yes":"No"}</td>
+ <td><div class="thumbs">${(x.imgs||[]).map(k=>`<img data-k="${k}" alt="Trade screenshot">`).join("")}</div><button data-add="${x.id}">+ Add</button></td>
+ <td><button data-del="${x.id}" aria-label="Delete trade">Delete</button></td></tr>`).join("")+`</tbody></table>`
+ :`<div class="empty">No trades recorded for this period. Complete the checklist, then use Record trade.</div>`}
+$("days").addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b)return;sel=+b.dataset.d;allTime=false;renderLog()});
+$("pw").onclick=()=>{wkStart.setDate(wkStart.getDate()-7);allTime=false;renderLog()};
+$("nw").onclick=()=>{wkStart.setDate(wkStart.getDate()+7);allTime=false;renderLog()};
+$("tw2").onclick=()=>{wkStart=mon(new Date());sel=(new Date().getDay()+6)%7;allTime=false;renderLog()};
+$("allt").onclick=()=>{allTime=true;renderLog()};
+$("hist").addEventListener("click",e=>{const b=e.target.closest("[data-del]");if(!b||!confirm("Delete this trade record?"))return;
+ const t=S.trades.find(x=>String(x.id)===b.dataset.del);(t&&t.imgs||[]).forEach(delShot);
+ S.trades=S.trades.filter(x=>String(x.id)!==b.dataset.del);save();renderLog()});
+$("clearHist").onclick=()=>{if(S.trades.length&&confirm("Delete ALL recorded trades? This cannot be undone.")){S.trades.forEach(t=>(t.imgs||[]).forEach(delShot));S.trades=[];save();renderLog()}};
+$("copyCsv").onclick=()=>{
+ const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+ const rows=[["Date","Instrument","Direction","Setup","Result","R","Risk","Emotion (1-5)","Checklist","Journaled","Emotion notes","Lesson"]]
+ .concat(S.trades.map(x=>[x.date,x.inst,x.dir,x.setup,x.res,x.r,x.risk,x.emo,x.score,x.journaled?"Yes":"No",x.emoNote,x.jrNote]));
+ const csv=rows.map(r=>r.map(q).join(",")).join("\n"),ta=$("csv");
+ ta.value=csv;ta.style.display="block";ta.rows=6;ta.select();
+ try{navigator.clipboard.writeText(csv).then(()=>{$("copyCsv").textContent="Copied"},()=>{})}catch(e){}};
+renderLog();
+document.getElementById("theme").onclick=()=>{const r=document.documentElement;
+ const light=getComputedStyle(r).getPropertyValue("--bg").trim()==="#f3f4f7";
+ r.setAttribute("data-theme",light?"dark":"light")};
+paint();
+</script>
+</body>
+</html>
